@@ -1,2 +1,2 @@
-# graphql-etag
-Etag manager caching for graphql
+# WARDEN
+Admin template using NextJS, Material UI

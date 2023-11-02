@@ -1,0 +1,50 @@
+body {
+  height: 100vh;
+  margin: 0;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+}
+
+#__next {
+  height: 100vh;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.h-100vh {
+  height: 100vh;
+}
+
+.w-100vh {
+  width: 100vh;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+.d-block {
+  display: block;
+} .d-flex {
+  display: flex;
+} .float-right {
+  float: right;
+} .float-left {
+  float: left;
+} .m-1 {
+  margin: 1rem;
+} .m-auto {
+  margin: auto;
+} .ta-center {
+  text-align: center;
+}

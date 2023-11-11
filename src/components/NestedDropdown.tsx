@@ -62,7 +62,6 @@ function GenerateButton({openDrawer, obj, parent}: {openDrawer: boolean, obj: Dr
         left: `${63 * obj.level}px`
       }}>
       <List component="div" disablePadding>
-        {obj.level}
       {obj.children.map((obj2, index2) => {
         // @ts-ignore
         return <GenerateButton openDrawer={openDrawer} obj={obj2} key={index2}/>
@@ -73,7 +72,7 @@ function GenerateButton({openDrawer, obj, parent}: {openDrawer: boolean, obj: Dr
   </ListItemButton>
 
   {/* Normal dropdown */}
-  { !!obj.children && obj.children.length > 0 && obj.level != 1 ? <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+  { !!obj.children && obj.children.length > 0 && (obj.level != 1 && !openDrawer || openDrawer) ? <Collapse in={isExpanded} timeout="auto" unmountOnExit>
     <List component="div" disablePadding>
     {obj.children.map((obj2, index2) => {
       // @ts-ignore

@@ -2,12 +2,12 @@ import { DrawerNavItem, DrawerNavItemWLevel } from "@/components/navigation/dash
 import { BaseProps } from "@/types/props";
 import { ListItem, ListItemButton, ListItemIcon, ListItemText, Collapse, List, Popover, Paper } from "@mui/material";
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { useRouter, NextRouter } from 'next/router';
 import {ExpandMore as ExpandMoreIcon, ExpandLess as ExpandLessIcon} from "@mui/icons-material";
 import { memo, useState } from "react";
 import { addObjLevelFunction } from "@/script/json-manip/obj";
 
-function GenerateButton({openDrawer, obj, parent}: {openDrawer: boolean, obj: DrawerNavItemWLevel, parent?: boolean}){ // parent only used in the top level of nav
+function GenerateButton({openDrawer, obj, parent, router}: {openDrawer: boolean, obj: DrawerNavItemWLevel, parent?: boolean, router: NextRouter}){ // parent only used in the top level of nav
   const [isExpanded, setIsExpanded] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
 
@@ -21,16 +21,16 @@ function GenerateButton({openDrawer, obj, parent}: {openDrawer: boolean, obj: Dr
 
   return (
   <>
+  {/* {!!obj.href ?  */}
   <List sx={{pl: parent ? 0 : 2}}>
   <ListItemButton
     sx={{
       minHeight: 48,
       justifyContent: isExpanded ? 'initial' : 'center',
       px: 2.5,
+      backgroundColor: router.pathname == obj.href ? '#c4e3ff' : 'white'
     }}
-    onClick={() => {
-      setIsExpanded((recent) => !recent)
-    }}
+    onClick={() => setIsExpanded((recent) => !recent)}
     onMouseOver={(e) => {
       if (openDrawer && !!obj.children && obj.children.length > 0) return e.preventDefault();
       handlePopoverOpen(e);
@@ -52,7 +52,6 @@ function GenerateButton({openDrawer, obj, parent}: {openDrawer: boolean, obj: Dr
     }
     <ListItemText primary={obj.label} sx={{ opacity: (openDrawer || (obj.level != 1)) ? 1 : 0 }} />
     { !!obj.children && obj.children.length > 0 && (openDrawer || (obj.level != 1)) ? (isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />) : null}
-
     
     {/* OnHover sidedown */}
     { !!obj.children && obj.children.length > 0 && !openDrawer && showPopover && obj.level == 1 ?
@@ -63,8 +62,13 @@ function GenerateButton({openDrawer, obj, parent}: {openDrawer: boolean, obj: Dr
       }}>
       <List component="div" disablePadding>
       {obj.children.map((obj2, index2) => {
-        // @ts-ignore
-        return <GenerateButton openDrawer={openDrawer} obj={obj2} key={index2}/>
+        return (
+          !!obj.href ?
+          // @ts-ignore
+          <Link href={obj2.href} className="dc" key={index2}><GenerateButton openDrawer={openDrawer} obj={obj2} router={router}/></Link> :
+          // @ts-ignore
+          <GenerateButton openDrawer={openDrawer} obj={obj2} key={index2} router={router}/>
+        )
       })}
       </List>
     </Paper> : null
@@ -75,8 +79,13 @@ function GenerateButton({openDrawer, obj, parent}: {openDrawer: boolean, obj: Dr
   { !!obj.children && obj.children.length > 0 && (obj.level != 1 && !openDrawer || openDrawer) ? <Collapse in={isExpanded} timeout="auto" unmountOnExit>
     <List component="div" disablePadding>
     {obj.children.map((obj2, index2) => {
-      // @ts-ignore
-      return <GenerateButton openDrawer={openDrawer} obj={obj2} key={index2}/>
+      return (
+        !!obj2.href ?
+        // @ts-ignore
+        <Link href={obj2.href} className="dc" key={index2}><GenerateButton openDrawer={openDrawer} obj={obj2} router={router}/></Link>
+        // @ts-ignore
+        : <GenerateButton openDrawer={openDrawer} obj={obj2} key={index2} router={router}/>
+      )
     })}
     </List>
   </Collapse> : null }
@@ -92,10 +101,11 @@ export default memo(function NestedDropdown(props: Partial<BaseProps> & {navSche
 
   return navSchema.map((obj, index) => (
       <ListItem key={index} disablePadding sx={{ display: 'block', backgroundColor: router.pathname == obj.href ? '#c4e3ff' : 'white' }}>
-        {!!obj.href ? <Link href={obj.href} className="dc">
-          {/* {generateButton(props.open, obj, true)} */}
-          <GenerateButton openDrawer={props.openDrawer} obj={obj} parent={true}/>
-        </Link> : <GenerateButton openDrawer={props.openDrawer} obj={obj} parent={true}/> }
+        {!!obj.href ?
+        <Link href={obj.href} className="dc">
+          <GenerateButton openDrawer={props.openDrawer} obj={obj} parent={true} router={router}/>
+        </Link>
+        : <GenerateButton openDrawer={props.openDrawer} obj={obj} parent={true} router={router}/>}
       </ListItem>
     ))
 })

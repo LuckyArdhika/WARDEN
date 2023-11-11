@@ -18,18 +18,23 @@ export const dashboardDrawerNav: DrawerNavItem[] = [
   }, {
     label: "Users",
     icon: PeopleAltOutlinedIcon,
-    children: [
+    href: '/dashboard/management/users'
+  }, {
+    label: "Users",
+    icon: PeopleAltOutlinedIcon,
+    children: [{
+        label: "Statistic",
+        href: '/dashboard/users/statistic',
+      },
       {
         label: "Child 1",
-        href: '/dashboard/users/statistic',
         children: [
           {
             label: "Child 1.1",
-            href: '/dashboard/users/statistic',
             children: [
               {
                 label: "Child 1.1.1",
-                href: '/dashboard/users/statistic'
+                href: '/dashboard/management/users'
               }
             ]
           }

@@ -27,7 +27,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { BaseProps } from '@/types/props';
 import { dashboardDrawerNav } from '@/components/navigation/dashboard';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import NestedDropdown from '@/components/NestedDropdown';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -104,7 +104,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer(props: BaseProps) {
   const theme = useTheme();
-  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -205,55 +204,7 @@ export default function MiniDrawer(props: BaseProps) {
         </div>
         <Divider />
         <List>
-          { dashboardDrawerNav.map((obj, index) => (
-            <ListItem key={index} disablePadding sx={{ display: 'block', backgroundColor: router.pathname == obj.href ? '#c4e3ff' : 'white' }}>
-              <Link href={obj.href}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <obj.icon />
-                </ListItemIcon>
-                <ListItemText primary={obj.label} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-              </Link>
-            </ListItem>
-          )) }
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <NestedDropdown navSchema={dashboardDrawerNav} openDrawer={open}/>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

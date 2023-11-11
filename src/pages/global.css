@@ -48,3 +48,7 @@ a {
 } .ta-center {
   text-align: center;
 }
+
+.dc {
+  color: rgb(var(--foreground-rgb));
+}
